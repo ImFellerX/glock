@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Instance</title>
+    <!-- Load Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Dark gray background */
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place the canvas behind all other content */
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- The interactive canvas background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 w-full p-4 bg-gray-900 bg-opacity-75 backdrop-filter backdrop-blur-lg shadow-xl">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-8">
+                <!-- Site Title/Logo -->
+                <a href="index.html" class="text-2xl font-bold text-white">Cloud Gaming Platform</a>
+                <!-- Navigation Links -->
+                <div class="hidden md:flex space-x-4">
+                    <a href="pricing.html" class="text-gray-300 hover:text-white transition-colors duration-200">Pricing</a>
+                    <a href="help.html" class="text-gray-300 hover:text-white transition-colors duration-200">Help</a>
+                    <a href="login.html" class="text-gray-300 hover:text-white transition-colors duration-200">Your Account</a>
+                </div>
+            </div>
+            <!-- Available Funds Section -->
+            <div class="flex items-center space-x-2">
+                <span class="text-sm font-medium text-gray-400">Available Funds:</span>
+                <span class="text-xl font-bold text-green-400">$50.00</span>
+                <a href="add-funds.html" class="ml-4 py-1 px-4 bg-indigo-600 rounded-full text-white font-medium text-sm hover:bg-indigo-700 transition-colors duration-200">Add Funds</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container mx-auto py-16 px-4 relative z-10">
+
+        <!-- Deploy Instance header section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-white sm:text-5xl">
+                Deploy Your Cloud Gaming Instance
+            </h1>
+            <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
+                Customize your high-performance server and get it running in minutes.
+            </p>
+        </div>
+
+        <!-- Deploy Instance form container -->
+        <div class="max-w-4xl mx-auto p-10 bg-gray-900 rounded-2xl shadow-2xl border-2 border-indigo-500">
+            
+            <form id="deploy-form" class="space-y-8">
+                
+                <!-- Section for selecting server region -->
+                <div>
+                    <label for="region" class="block text-xl font-medium text-white mb-2">Region</label>
+                    <p class="text-gray-400 text-sm mb-4">Choose the closest region for the lowest latency.</p>
+                    <select id="region" name="region" required
+                            class="block w-full py-3 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="us-east-1">US East (N. Virginia)</option>
+                        <option value="us-west-1">US West (N. California)</option>
+                        <option value="eu-central-1">Europe (Frankfurt)</option>
+                        <option value="ap-southeast-1">Asia Pacific (Singapore)</option>
+                    </select>
+                </div>
+
+                <!-- Section for instance type -->
+                <div>
+                    <label for="instance-type" class="block text-xl font-medium text-white mb-2">Instance Type</label>
+                    <p class="text-gray-400 text-sm mb-4">Select the hardware configuration that best suits your gaming needs.</p>
+                    <select id="instance-type" name="instance-type" required
+                            class="block w-full py-3 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="standard">Standard (8-core CPU, 16GB RAM)</option>
+                        <option value="high-performance">High Performance (16-core CPU, 32GB RAM, RTX 4070)</option>
+                        <option value="extreme">Extreme (24-core CPU, 64GB RAM, RTX 4090)</option>
+                    </select>
+                </div>
+                
+                <!-- Section for storage size -->
+                <div>
+                    <label for="storage" class="block text-xl font-medium text-white mb-2">Storage</label>
+                    <p class="text-gray-400 text-sm mb-4">Choose your storage size. More space for more games!</p>
+                    <input type="range" id="storage" name="storage" min="100" max="1000" value="250" step="50"
+                           class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg accent-indigo-500">
+                    <div class="flex justify-between text-white text-sm mt-2">
+                        <span>100 GB</span>
+                        <span id="storage-value" class="font-bold">250 GB</span>
+                        <span>1000 GB</span>
+                    </div>
+                </div>
+
+                <!-- Submit button for deployment -->
+                <div class="pt-4">
+                    <button type="submit"
+                            class="w-full flex justify-center py-4 px-8 border border-transparent rounded-full shadow-lg text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                        Deploy Instance
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================================
+        // Interactive Particle Background Logic
+        // ==========================================================
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        // Mouse position object
+        let mouse = { x: null, y: null };
+        const mouseRadius = 150;
+
+        // Adjust canvas size on window load and resize
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('load', resizeCanvas);
+        window.addEventListener('resize', resizeCanvas);
+
+        // Update mouse position on mouse move
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        // Reset mouse position when mouse leaves the window
+        window.addEventListener('mouseout', function() {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Particle class definition
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+
+            // Method to draw a single particle
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            // Method to update particle position and handle interactions
+            update() {
+                // Check if particle is still within the canvas
+                if (this.x > width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                // Mouse interaction
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+
+                // If particle is close to the mouse, it repels
+                if (distance < mouseRadius) {
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    let maxSpeed = 10;
+                    let push = (mouseRadius - distance) / mouseRadius;
+                    let directionX = forceDirectionX * push * maxSpeed;
+                    let directionY = forceDirectionY * push * maxSpeed;
+
+                    this.x -= directionX;
+                    this.y -= directionY;
+                }
+
+                // Move particle
+                this.x += this.directionX;
+                this.y += this.directionY;
+
+                // Draw the particle
+                this.draw();
+            }
+        }
+
+        // Array to hold the particles
+        let particlesArray = [];
+
+        // Function to create the particles
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (width * height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 5) + 1;
+                let x = (Math.random() * ((width - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((height - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.5) - 0.25; // Slower movement
+                let directionY = (Math.random() * 0.5) - 0.25;
+                let color = 'rgba(255, 255, 255, 0.8)';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // Function to connect particles with lines
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    
+                    // If particles are close, draw a line between them
+                    if (distance < (width/7) * (height/7)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = 'rgba(255, 255, 255,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Main animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, width, height);
+
+            // Update and draw each particle
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+
+            // Connect nearby particles with lines
+            connect();
+        }
+
+        // Start the animation and scene setup when the window loads
+        window.onload = function() {
+            resizeCanvas();
+            init();
+            animate();
+        };
+
+        // Re-initialize particles on window resize to adjust density
+        window.addEventListener('resize', function() {
+            resizeCanvas();
+            init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            margin: 0;
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+
+</head>
+<body class="relative">
+
+    <canvas id="particle-canvas"></canvas>
+
+    <nav class="sticky top-0 z-50 w-full p-4 bg-gray-900 bg-opacity-75 backdrop-filter backdrop-blur-lg shadow-xl">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-8">
+                <a href="index.html" class="text-2xl font-bold text-white">Cloud Gaming Platform</a>
+                <div class="hidden md:flex space-x-4">
+                    <a href="pricing.html" class="text-gray-300 hover:text-white transition-colors duration-200">Pricing</a>
+                    <a href="help.html" class="text-gray-300 hover:text-white transition-colors duration-200">Help</a>
+                    <a href="login.html" class="text-gray-300 hover:text-white transition-colors duration-200">Your Account</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-sm font-medium text-gray-400">Your Funds:</span>
+                <span id="funds-display" class="text-xl font-bold text-green-400">Loading...</span>
+                <button id="logoutBtn" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 ml-4">
+                  Logout
+                </button>
+                <script type="module" src="./logout.js"></script>
+                  
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container mx-auto py-16 px-4 relative z-10 text-white">
+
+        <div class="text-center mb-16 p-10 rounded-2xl bg-gray-900 bg-opacity-50 border-2 border-indigo-500 shadow-2xl">
+            <h1 class="text-4xl font-extrabold sm:text-5xl">
+                Welcome to your Dashboard
+            </h1>
+            <p class="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
+                Start a new gaming session or manage your existing instances.
+            </p>
+            <div class="mt-8">
+                <a href="deploy.html" class="inline-block py-3 px-8 text-lg font-bold text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 transition-colors duration-200">
+                    Deploy New Instance
+                </a>
+            </div>
+
+                    <div id="funds-section" class="bg-gray-900 bg-opacity-50 p-6 rounded-2xl border-2 border-indigo-500 shadow-2xl mb-16">
+            <h2 class="text-2xl font-bold text-white mb-4">Manage Your Credits</h2>
+            <div class="space-y-4">
+              <div class="flex items-center space-x-2">
+                <input type="number" id="add-amount" min="1" placeholder="Amount to add"
+                       class="w-32 px-3 py-2 rounded-md bg-gray-800 text-white focus:outline-none"/>
+                <button id="add-funds-btn"
+                        class="px-4 py-2 bg-green-600 rounded-md text-white hover:bg-green-700">
+                  Add Funds
+                </button>
+              </div>
+              <div class="flex items-center space-x-2">
+                <input type="number" id="deduct-amount" min="1" placeholder="Amount to deduct"
+                       class="w-32 px-3 py-2 rounded-md bg-gray-800 text-white focus:outline-none"/>
+                <button id="deduct-funds-btn"
+                        class="px-4 py-2 bg-red-600 rounded-md text-white hover:bg-red-700">
+                  Deduct Funds
+                </button>
+              </div>
+              <p id="funds-message" class="text-sm mt-2"></p>
+            </div>
+          </div>
+  
+        </div>
+
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-white mb-8">Popular Games</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-900 rounded-xl shadow-lg border border-gray-700 p-6 flex flex-col">
+                    <img src="https://placehold.co/400x200/2f3a4b/a0aec0?text=Game+1" alt="Game 1 Placeholder" class="rounded-lg mb-4 h-40 object-cover">
+                    <h3 class="text-xl font-bold text-white flex-grow">Astro Odyssey</h3>
+                    <p class="text-gray-400 text-sm mt-2">Explore the vast, star-filled universe in this space adventure.</p>
+                    <button class="mt-4 w-full py-2 px-4 bg-indigo-600 rounded-md text-white font-medium hover:bg-indigo-700 transition-colors duration-200" onclick="launchGame('Astro Odyssey')">Launch</button>
+                </div>
+                <div class="bg-gray-900 rounded-xl shadow-lg border border-gray-700 p-6 flex flex-col">
+                    <img src="https://placehold.co/400x200/2f3a4b/a0aec0?text=Game+2" alt="Game 2 Placeholder" class="rounded-lg mb-4 h-40 object-cover">
+                    <h3 class="text-xl font-bold text-white flex-grow">Cyber Run</h3>
+                    <p class="text-gray-400 text-sm mt-2">Hack your way through a futuristic cyberpunk city.</p>
+                    <button class="mt-4 w-full py-2 px-4 bg-indigo-600 rounded-md text-white font-medium hover:bg-indigo-700 transition-colors duration-200" onclick="launchGame('Cyber Run')">Launch</button>
+                </div>
+                <div class="bg-gray-900 rounded-xl shadow-lg border border-gray-700 p-6 flex flex-col">
+                    <img src="https://placehold.co/400x200/2f3a4b/a0aec0?text=Game+3" alt="Game 3 Placeholder" class="rounded-lg mb-4 h-40 object-cover">
+                    <h3 class="text-xl font-bold text-white flex-grow">Fantasy Realms</h3>
+                    <p class="text-gray-400 text-sm mt-2">A classic medieval RPG with dragons and magic.</p>
+                    <button class="mt-4 w-full py-2 px-4 bg-indigo-600 rounded-md text-white font-medium hover:bg-indigo-700 transition-colors duration-200" onclick="launchGame('Fantasy Realms')">Launch</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-3xl font-bold text-white mb-8">My Active Sessions</h2>
+            <div id="active-sessions-container" class="space-y-4">
+                <div class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">No active sessions running.</h3>
+                        <p class="text-gray-400 text-sm">Launch a game to see it here!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================================
+        // Interactive Particle Background Logic
+        // ==========================================================
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        // Mouse position object
+        let mouse = { x: null, y: null };
+        const mouseRadius = 150;
+
+        // Adjust canvas size on window load and resize
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('load', resizeCanvas);
+        window.addEventListener('resize', resizeCanvas);
+
+        // Update mouse position on mouse move
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        // Reset mouse position when mouse leaves the window
+        window.addEventListener('mouseout', function() {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Particle class definition
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+
+            // Method to draw a single particle
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            // Method to update particle position and handle interactions
+            update() {
+                // Check if particle is still within the canvas
+                if (this.x > width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                // Mouse interaction
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+
+                // If particle is close to the mouse, it repels
+                if (distance < mouseRadius) {
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    let maxSpeed = 10;
+                    let push = (mouseRadius - distance) / mouseRadius;
+                    let directionX = forceDirectionX * push * maxSpeed;
+                    let directionY = forceDirectionY * push * maxSpeed;
+
+                    this.x -= directionX;
+                    this.y -= directionY;
+                }
+
+                // Move particle
+                this.x += this.directionX;
+                this.y += this.directionY;
+
+                // Draw the particle
+                this.draw();
+            }
+        }
+
+        // Array to hold the particles
+        let particlesArray = [];
+
+        // Function to create the particles
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (width * height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 5) + 1;
+                let x = (Math.random() * ((width - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((height - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.5) - 0.25; // Slower movement
+                let directionY = (Math.random() * 0.5) - 0.25;
+                let color = 'rgba(255, 255, 255, 0.8)';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // Function to connect particles with lines
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    
+                    // If particles are close, draw a line between them
+                    if (distance < (width/7) * (height/7)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = 'rgba(255, 255, 255,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Main animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, width, height);
+
+            // Update and draw each particle
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+
+            // Connect nearby particles with lines
+            connect();
+        }
+
+        // Start the animation and scene setup when the window loads
+        window.onload = function() {
+            resizeCanvas();
+            init();
+            animate();
+        };
+
+        // Re-initialize particles on window resize to adjust density
+        window.addEventListener('resize', function() {
+            resizeCanvas();
+            init();
+        });
+
+        // ==========================================================
+        // Dashboard-specific JavaScript
+        // ==========================================================
+        const activeSessionsContainer = document.getElementById('active-sessions-container');
+
+        // This function would be called when a game is launched
+        function launchGame(gameTitle) {
+            alert(`Launching "${gameTitle}"... (This is a demo)`);
+            // In a real application, this would make an API call to deploy a game instance.
+            // The response would then be used to add a new session card.
+
+            // Simulate adding a new active session
+            const sessionCard = document.createElement('div');
+            sessionCard.className = 'bg-gray-900 p-6 rounded-xl shadow-lg border border-green-500 flex items-center justify-between animate-pulse';
+            sessionCard.innerHTML = `
+                <div>
+                    <h3 class="text-xl font-bold text-white">${gameTitle}</h3>
+                    <p class="text-gray-400 text-sm">Status: <span class="text-green-400">Loading...</span></p>
+                </div>
+                <div class="flex space-x-2">
+                    <button class="py-2 px-4 bg-gray-700 rounded-md text-white font-medium hover:bg-gray-600 transition-colors duration-200">Connect</button>
+                    <button class="py-2 px-4 bg-red-600 rounded-md text-white font-medium hover:bg-red-700 transition-colors duration-200">Stop</button>
+                </div>
+            `;
+            // Remove the "No active sessions" message if it exists
+            const noSessionsMessage = activeSessionsContainer.querySelector('h3');
+            if (noSessionsMessage && noSessionsMessage.textContent.includes('No active sessions')) {
+                activeSessionsContainer.innerHTML = '';
+            }
+
+            activeSessionsContainer.appendChild(sessionCard);
+
+            // Simulate the session becoming ready after a few seconds
+            setTimeout(() => {
+                sessionCard.classList.remove('animate-pulse');
+                sessionCard.querySelector('p span').textContent = 'Ready';
+            }, 5000); // 5-second delay
+        }
+
+        // Add a placeholder click handler for the Connect and Stop buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.textContent === 'Connect') {
+                alert('Connecting to your game session... (Demo)');
+            } else if (e.target.textContent === 'Stop') {
+                e.target.closest('div.bg-gray-900').remove();
+            }
+        });
+    </script>
+        <script type="module" src="./frontend-funds.js"></script>
+
+</body>
+</html>

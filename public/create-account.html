@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Dark gray background */
+            margin: 0;
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place the canvas behind all other content */
+        }
+        /* Style for the custom message box */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            transition: all 0.3s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .message-box.error {
+            background-color: #fca5a5;
+            color: #b91c1c;
+        }
+        .message-box.success {
+            background-color: #a7f3d0;
+            color: #065f46;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex items-center justify-center">
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="container mx-auto py-16 px-4 relative z-10">
+        <div class="max-w-xl mx-auto p-10 bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-2xl shadow-2xl border-2 border-indigo-500">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-extrabold text-white">
+                    Create Your Account
+                </h1>
+                <p class="mt-2 text-lg text-gray-300">
+                    Get started with our cloud gaming platform.
+                </p>
+            </div>
+            <form id="create-account-form" class="space-y-6">
+                <div>
+                    <label for="full-name" class="block text-sm font-medium text-gray-300">Full Name</label>
+                    <div class="mt-1">
+                        <input id="full-name" name="full-name" type="text" autocomplete="name" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 bg-gray-800 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300">Email address</label>
+                    <div class="mt-1">
+                        <input id="email" name="email" type="email" autocomplete="email" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 bg-gray-800 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="country" class="block text-sm font-medium text-gray-300">Country</label>
+                    <div class="mt-1">
+                        <select id="country" name="country" required
+                                class="block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="">Select your country</option>
+                            <option value="us">United States</option>
+                            <option value="ca">Canada</option>
+                            <option value="gb">United Kingdom</option>
+                            <option value="au">Australia</option>
+                            <option value="de">Germany</option>
+                            <option value="fr">France</option>
+                            <option value="jp">Japan</option>
+                            <option value="in">India</option>
+                            </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                    <div class="mt-1">
+                        <input id="password" name="password" type="password" autocomplete="new-password" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 bg-gray-800 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-300">Confirm Password</label>
+                    <div class="mt-1">
+                        <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 bg-gray-800 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" id="registerBtn"
+                            class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                        <span id="button-text">Create Account</span>
+                        <span id="loading-spinner" class="hidden animate-spin h-4 w-4 border-2 border-white border-opacity-50 border-t-white rounded-full"></span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-400">
+                    Already a member?
+                    <a href="login.html" class="font-medium text-indigo-400 hover:text-indigo-300">
+                        Sign in
+                    </a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="custom-message-box" class="message-box p-6 rounded-lg shadow-xl max-w-sm w-full">
+        <div class="flex justify-between items-center mb-2">
+            <h3 id="message-title" class="text-xl font-bold"></h3>
+            <button id="close-message" class="text-white hover:text-gray-200 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <p id="message-text">We've sent a confirmation link to your email address. Please click the link to activate your account.</p>
+    </div>
+
+    <script type="module" src="./frontend-register.js"></script>
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let mouse = { x: null, y: null };
+        const mouseRadius = 150;
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('load', resizeCanvas);
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+        window.addEventListener('mouseout', function() {
+            mouse.x = null;
+            mouse.y = null;
+        });
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY;
+                this.size = size; this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                if (this.x > width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > height || this.y < 0) this.directionY = -this.directionY;
+                let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < mouseRadius) {
+                    let forceDirectionX = dx / distance; let forceDirectionY = dy / distance;
+                    let maxSpeed = 10; let push = (mouseRadius - distance) / mouseRadius;
+                    let directionX = forceDirectionX * push * maxSpeed;
+                    let directionY = forceDirectionY * push * maxSpeed;
+                    this.x -= directionX; this.y -= directionY;
+                }
+                this.x += this.directionX; this.y += this.directionY;
+                this.draw();
+            }
+        }
+        let particlesArray = [];
+        function init() {
+            particlesArray = []; let numberOfParticles = (width * height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 5) + 1;
+                let x = (Math.random() * ((width - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((height - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.5) - 0.25;
+                let directionY = (Math.random() * 0.5) - 0.25;
+                let color = 'rgba(255, 255, 255, 0.8)';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (width / 7) * (height / 7)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = 'rgba(255, 255, 255,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+        window.onload = function() {
+            resizeCanvas();
+            init();
+            animate();
+        };
+        window.addEventListener('resize', function() {
+            resizeCanvas();
+            init();
+        });
+    </script>
+</body>
+</html>

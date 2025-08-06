@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #1a202c; }
+        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .message-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; transition: all 0.3s ease-in-out; opacity: 0; visibility: hidden; }
+        .message-box.show { opacity: 1; visibility: visible; }
+        .message-box.error { background-color: #fca5a5; color: #b91c1c; }
+        .message-box.success { background-color: #a7f3d0; color: #065f46; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen relative">
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="bg-gray-800 bg-opacity-75 p-8 rounded-2xl shadow-xl max-w-sm w-full mx-4 relative z-10">
+        <h2 class="text-3xl font-bold text-white text-center mb-6">Log in to your account</h2>
+        <form id="login-form" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-300">Email address</label>
+                <input id="email" name="email" type="email" required class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 bg-gray-700 text-white">
+            </div>
+            <div>
+                <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                    <a href="forgot-password.html" class="font-medium text-indigo-400 hover:text-indigo-300 text-sm">Forgot your password?</a>
+                </div>
+                <div class="mt-1 relative">
+                    <input id="password" name="password" type="password" required class="appearance-none block w-full px-3 py-2 pr-10 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 bg-gray-700 text-white">
+                    <span id="toggle-password" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                        <i id="password-icon" class="fas fa-eye-slash text-gray-400"></i>
+                    </span>
+                </div>
+            </div>
+            <button type="submit" id="sign-in-btn" class="w-full flex justify-center items-center gap-2 py-2 px-4 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none">Sign in</button>
+            <div id="loginError" class="hidden text-red-400 text-sm"></div>
+        </form>
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-400">Not a member? <a href="create-account.html" class="font-medium text-indigo-400 hover:text-indigo-300">Create an account</a></p>
+        </div>
+    </div>
+
+    <div id="custom-message-box" class="message-box p-6 rounded-lg shadow-xl max-w-sm w-full">
+        <div class="flex justify-between items-center mb-2">
+            <h3 id="message-title" class="text-xl font-bold"></h3>
+            <button id="close-message" class="text-gray-900 hover:text-gray-700 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <p id="message-text" class="text-sm"></p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, mouse = { x: null, y: null };
+        const mouseRadius = 150;
+        function resizeCanvas(){width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;}
+        window.addEventListener('load',resizeCanvas);
+        window.addEventListener('resize',resizeCanvas);
+        window.addEventListener('mousemove',e=>{mouse.x=e.x;mouse.y=e.y;});
+        window.addEventListener('mouseout',()=>{mouse.x=null;mouse.y=null;});
+        class Particle{constructor(x,y,dx,dy,size,color){this.x=x;this.y=y;this.dx=dx;this.dy=dy;this.size=size;this.color=color;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2,false);ctx.fillStyle=this.color;ctx.fill();}update(){if(this.x>width||this.x<0)this.dx=-this.dx;if(this.y>height||this.y<0)this.dy=-this.dy;let dx=mouse.x-this.x;let dy=mouse.y-this.y;let dist=Math.sqrt(dx*dx+dy*dy);if(dist<mouseRadius){let fx=dx/dist;let fy=dy/dist;let push=(mouseRadius-dist)/mouseRadius;this.x-=fx*push*10;this.y-=fy*push*10;}this.x+=this.dx;this.y+=this.dy;this.draw();}}let particles=[];function init(){particles=[];let n=(width*height)/9000;for(let i=0;i<n;i++){let s=(Math.random()*5)+1;let x=(Math.random()*((width-s*2)-(s*2))+s*2);let y=(Math.random()*((height-s*2)-(s*2))+s*2);let dx=(Math.random()*0.5)-0.25;let dy=(Math.random()*0.5)-0.25;particles.push(new Particle(x,y,dx,dy,s,'rgba(255,255,255,0.8)'));}}function connect(){for(let a=0;a<particles.length;a++){for(let b=a;b<particles.length;b++){let d=((particles[a].x-particles[b].x)**2)+((particles[a].y-particles[b].y)**2);if(d<(width/7)*(height/7)){let o=1-(d/20000);ctx.strokeStyle='rgba(255,255,255,'+o+')';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(particles[a].x,particles[a].y);ctx.lineTo(particles[b].x,particles[b].y);ctx.stroke();}}}}
+        function animate(){requestAnimationFrame(animate);ctx.clearRect(0,0,width,height);for(let i=0;i<particles.length;i++){particles[i].update();}connect();}
+        window.onload=function(){resizeCanvas();init();animate();};window.addEventListener('resize',()=>{resizeCanvas();init();});
+    </script>
+
+    <script type="module" src="./frontend-login.js"></script>
+</body>
+</html>

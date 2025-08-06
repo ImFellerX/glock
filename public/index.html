@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="text-4xl font-extrabold">Loading...</h1>
+        <p class="mt-4 text-lg text-gray-400">Redirecting you to the correct page.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hasVisited = localStorage.getItem('hasVisited');
+
+            if (hasVisited) {
+                window.location.href = 'login.html';
+            } else {
+                window.location.href = 'create-account.html';
+            }
+        });
+    </script>
+</body>
+</html>
