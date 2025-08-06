@@ -54,6 +54,7 @@ if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
 }
 
 // ---------------- Firebase Admin Initialization ----------------
+const serviceAccountPath = process.env.RENDER_SERVICE_KEY || path.join(__dirname, 'service-account-key.json');
 const admin = require("firebase-admin");
 
 admin.initializeApp({
