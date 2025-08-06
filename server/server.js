@@ -28,6 +28,8 @@ app.use("/api/forgot-password", authLimiter);
 const allowedOrigins = [
     'http://localhost:3000',
     'https://cloud-gaming-project.onrender.com',
+    'https://glock-i1s8.onrender.com', // ✅ Add your new backend URL
+    'https://your-frontend-domain.vercel.app' // ✅ Add this once you deploy frontend
 ];
 
 app.use(cors({
